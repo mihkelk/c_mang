@@ -1,12 +1,13 @@
 /*
- * main.c
+ * m5.c
  *
- *  Created on: 16.10.2012
+ *  Created on: 17.10.2012
  *      Author: mihkelk
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h> //värvide jaoks
 
 int x;
 int y;
@@ -15,6 +16,7 @@ int suurus = 20;
 int m = 0;
 int px = 2;
 int py = 2;
+int jsuurus = 5;
 
 int toad(r)
 {
@@ -46,8 +48,8 @@ int toad(r)
 	koordinaadid[20][0][11] = 2;
 
 	return 1;
-}
 
+}
 
 int tuba1()
 {
@@ -55,8 +57,9 @@ int tuba1()
 	py = 19;
 	return 1;
 };
-int tuba2(){
 
+int tuba2()
+{
 	//tegelase teise toa otsa liigutamine
 	px = 11;
 	py = 1;
@@ -67,12 +70,11 @@ int main()
 {
 	int x;
 	int y;
-
-	int suurus = 20;
 	int r = 10;
 
 	while ("TRUE")
 	{
+
 		toad(r);
 
 		if (koordinaadid[10][py][px] == 2)
@@ -93,7 +95,8 @@ int main()
 		{
 			px++;
 			koordinaadid[r][py][px - 1] = 0;
-		} else if (klahv == 'a' && (koordinaadid[r][py][px - 1] != 1))
+		}
+		else if (klahv == 'a' && (koordinaadid[r][py][px - 1] != 1))
 		{
 			px--;
 			koordinaadid[r][py][px + 1] = 0;
@@ -114,9 +117,9 @@ int main()
 //-------------------------------joonistamine-----------------------------//
 		system("cls"); // tühjendab ekraani
 
-		for (y = 0; y < (suurus + 1); y++)
+		for (y = py-5; y < (py + jsuurus + 1); y++)
 		{
-			for (x = 0; x < (suurus + 1); x++)
+			for (x = px-5; x < (px + jsuurus + 1); x++)
 			{
 				if (x == px && y == py)
 				{
@@ -128,14 +131,19 @@ int main()
 					printf(" ");
 					break;
 				case 1:
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 					printf("\333"); //ASCII koodid kaheksanddsüsteemis
 					break;
 				case 3:
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
 					printf("\1");
 					break;
+
 				default:
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
 					printf("%d", koordinaadid[r][y][x]);
 					break;
+
 				};
 
 			};
