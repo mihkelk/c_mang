@@ -1,155 +1,306 @@
 /*
- * m5.c
+ * main.c
  *
- *  Created on: 17.10.2012
+ *  Created on: 23.10.2012
  *      Author: mihkelk
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h> //värvide jaoks
-
 int x;
 int y;
-int koordinaadid[64][64][64];
-int suurus = 20;
+int z;
+int koordinaadid[100][100][100];
+int suurus = 1000;
 int m = 0;
-int px = 2;
-int py = 2;
-int jsuurus = 5;
+int px = 30;
+int py = 30;
+int jsuurus = 10; //joonistatava vaatevälja suurus
 
-int toad(r)
+// Maailma loomine failist
+int maailm()
 {
-	int x;
-	int y;
+	//int x;
+	//int y;
+//char failinimi[7];
+ //char failinimi = "z"+ znumber + ".txt"
+// korrus b1
+	FILE *bp = fopen("z49.txt", "r"); //Faili sisselugemine
+	char asukohtb1 = '0';
 
-	//üldise toa loomine
+	z = 49;
 
-	for (y = 0; y < (suurus + 1); y++)
+	for (y = 0; asukohtb1 != '-'; y++)
 	{
-		for (x = 0; x < (suurus + 1); x++)
+		for (x = 0; asukohtb1 != '\n'; x++)
 		{
-			if ((y == suurus || y == 0) || (x == suurus || x == 0))
+			asukohtb1 = fgetc(bp);
+			switch (asukohtb1)
 			{
-				koordinaadid[r][y][x] = 1;
+			case '0':
+				koordinaadid[z][y][x] = 0; //tühjus
+				break;
+			case '1':
+				koordinaadid[z][y][x] = 1; //sein
+				break;
+			case '2':
+				koordinaadid[z][y][x] = 2; //muru
+				break;
+			case '4':
+				koordinaadid[z][y][x] = 4; //põõsas
+				break;
+			case '5':
+				koordinaadid[z][y][x] = 5; //trepp alla
+				break;
+			case '6':
+				koordinaadid[z][y][x] = 6; //trepp yles
+				break;
+			case '7':
+				koordinaadid[z][y][x] = 7; //puitpõrand
+				break;
+			default:
+				koordinaadid[z][y][x] = 9;
+				break;
 			}
-			else
-			{
-				koordinaadid[r][y][x] = 0;
-			};
 		};
+		asukohtb1 = fgetc(bp);
 	};
 
-	//vastava toa loomine
-	koordinaadid[10][20][10] = 2;
-	koordinaadid[10][4][6] = 0;
+	printf("Laetud 50");
+	// korrus 0
 
-	koordinaadid[20][4][6] = 1;
-	koordinaadid[20][0][11] = 2;
+	FILE *fp = fopen("z50.txt", "r"); //Faili sisselugemine
+	char asukoht = '0';
+	z = 50;
+
+	for (y = 0; asukoht != '-'; y++)
+	{
+		for (x = 0; asukoht != '\n'; x++)
+		{
+			asukoht = fgetc(fp);
+			switch (asukoht)
+			{
+			case '0':
+				koordinaadid[z][y][x] = 0; //tühjus
+				break;
+			case '1':
+				koordinaadid[z][y][x] = 1; //sein
+				break;
+			case '2':
+				koordinaadid[z][y][x] = 2; //muru
+				break;
+			case '4':
+				koordinaadid[z][y][x] = 4; //põõsas
+				break;
+			case '5':
+				koordinaadid[z][y][x] = 5; //trepp alla
+				break;
+			case '6':
+				koordinaadid[z][y][x] = 6; //trepp yles
+				break;
+			default:
+				koordinaadid[z][y][x] = 9;
+				break;
+			}
+		};
+		asukoht = fgetc(fp);
+	};
 
 	return 1;
-
 }
 
-int tuba1()
+//-------------------------------joonistamine-----------------------------//
+int joonistamine()
 {
-	px = 10;
-	py = 19;
-	return 1;
-};
+	system("cls");
 
-int tuba2()
-{
-	//tegelase teise toa otsa liigutamine
-	px = 11;
-	py = 1;
-	return 1;
-};
+	for (y = py - jsuurus; y < (py + jsuurus + 1); y++)
+	{
+		for (x = px - jsuurus; x < (px + jsuurus + 1); x++)
+		{
+			if (x == px && y == py)
+			{
+				koordinaadid[z][y][x] = 3;
+			}
+			switch (koordinaadid[z][y][x])
+			{
+			case 0:
+				//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 34);
+				printf(" ");
+				break;
+			case 1:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+				printf("\333"); //ASCII koodid kaheksanddsüsteemis
+				break;
+			case 2:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+				printf("\261");
+				break;
+			case 3:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 154);
+				printf("\1");
+				break;
+			case 4:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 294); //42
+				printf("\260");
+				break;
+			case 5:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+				printf("v");
+				break;
+			case 6:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+				printf("^");
+				break;
+			case 7:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2680);
+				printf("\262");
+				// \334
+				break;
 
+			default:
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
+				printf("%d", koordinaadid[z][y][x]);
+				break;
+			};
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0); // värv tagasi mustaks, et ei tomuks jama taustavärvidega
+
+		};
+		printf("\n");
+	};
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+	printf("Kulda 50");
+	printf("   Elusid 50\n");
+	printf("Kõike 50");
+	return 0;
+}
+//------------------------------------------------------------------------//
+
+//-------------------------------peafunktsioon----------------------------//
 int main()
 {
-	int x;
-	int y;
-	int r = 10;
 
-	while ("TRUE")
-	{
+	maailm();
+	z = 50;
+	joonistamine();
 
-		toad(r);
-
-		if (koordinaadid[10][py][px] == 2)
-		{
-			r = 20;
-			tuba2();
-		};
-		if (koordinaadid[20][py][px] == 2)
-		{
-			r = 10;
-			tuba1();
-		};
-
+	int Q = 1;
+	int rs1 = 0; // salvestab ruudu kus mängja seisab, et see hiljem taastada
+	int rs2 = 0; // salvestab teise ruudu kus mängija seisis
+	int s1 = 1; // samm 1
+	int s2 = 0; // samm 2
+	while (Q == 1) {
 //----------Klahvivajutuste-järgi-mängija-koordinaatide-muutmine----------//
 		char klahv = getch();
 
-		if (klahv == 'd' && (koordinaadid[r][py][px + 1] != 1))
+		if (klahv == 'd' && (koordinaadid[z][py][px + 1] != 1))
 		{
-			px++;
-			koordinaadid[r][py][px - 1] = 0;
-		}
-		else if (klahv == 'a' && (koordinaadid[r][py][px - 1] != 1))
-		{
-			px--;
-			koordinaadid[r][py][px + 1] = 0;
-		}
-		if (klahv == 'w' && (koordinaadid[r][py - 1][px] != 1))
-		{
-			py--;
-			koordinaadid[r][py + 1][px] = 0;
-		}
-		if (klahv == 's' && (koordinaadid[r][py + 1][px] != 1))
-		{
-			py++;
-			koordinaadid[r][py - 1][px] = 0;
-		}
-		toad(r);
-//------------------------------------------------------------------------//
-
-//-------------------------------joonistamine-----------------------------//
-		system("cls"); // tühjendab ekraani
-
-		for (y = py-5; y < (py + jsuurus + 1); y++)
-		{
-			for (x = px-5; x < (px + jsuurus + 1); x++)
+			if (s1 == 1)
 			{
-				if (x == px && y == py)
-				{
-					koordinaadid[r][y][x] = 3;
-				}
-				switch (koordinaadid[r][y][x])
-				{
-				case 0:
-					printf(" ");
-					break;
-				case 1:
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-					printf("\333"); //ASCII koodid kaheksanddsüsteemis
-					break;
-				case 3:
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
-					printf("\1");
-					break;
+				s2 = 0;
+				rs1 = koordinaadid[z][py][px + 1];
+				px++;
+				koordinaadid[z][py][px - 1] = rs2;
+				s1 = 0;
+			}
+			if (s2 == 1)
+			{
+				rs2 = koordinaadid[z][py][px + 1];
+				px++;
+				koordinaadid[z][py][px - 1] = rs1;
+				s2 = 0;
+				s1 = 1;
+			}
+		}
+		else if (klahv == 'a' && (koordinaadid[z][py][px - 1] != 1))
+		{
+			//rsalvestatud = koordinaadid[z][py][px + 1];
+			if (s1 == 1)
+			{
+				s2 = 0;
+				rs1 = koordinaadid[z][py][px - 1];
+				px--;
+				koordinaadid[z][py][px + 1] = rs2;
+				s1 = 0;
+			}
+			if (s2 == 1)
+			{
+				rs2 = koordinaadid[z][py][px - 1];
+				px--;
+				koordinaadid[z][py][px + 1] = rs1;
+				s2 = 0;
+				s1 = 1;
+			}
+			//koordinaadid[z][py][px + 3] = rsalvestatud;*/
+		}
+		if (klahv == 'w' && (koordinaadid[z][py - 1][px] != 1))
+		{
+			if (s1 == 1)
+			{
+				s2 = 0;
+				rs1 = koordinaadid[z][py - 1][px];
+				py--;
+				koordinaadid[z][py + 1][px] = rs2;
+				s1 = 0;
+			}
+			if (s2 == 1)
+			{
+				rs2 = koordinaadid[z][py - 1][px];
+				py--;
+				koordinaadid[z][py + 1][px] = rs1;
+				s2 = 0;
+				s1 = 1;
+			}
 
-				default:
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1);
-					printf("%d", koordinaadid[r][y][x]);
-					break;
+		}
+		if (klahv == 's' && (koordinaadid[z][py + 1][px] != 1))
+		{
+			if (s1 == 1)
+			{
+				s2 = 0;
+				rs1 = koordinaadid[z][py + 1][px];
+				py++;
+				koordinaadid[z][py - 1][px] = rs2;
+				s1 = 0;
+			}
+			if (s2 == 1)
+			{
+				rs2 = koordinaadid[z][py + 1][px];
+				py++;
+				koordinaadid[z][py - 1][px] = rs1;
+				s2 = 0;
+				s1 = 1;
+			}
+		}
+		if (klahv == 'q')
+		{
+			Q = 0;
+		}
+		s2 = 1;
 
-				};
+		switch (koordinaadid[z][py][px])
+		{
+		case 5:
+			z--;
+			rs1 = 2;
+			rs2 = 2;
+			break;
+		case 6:
+			z++;
+			rs1 = 2;
+			rs2 = 2;
 
-			};
-			printf("\n");
-		};
-//------------------------------------------------------------------------//
+			break;
+		}
+		joonistamine();
+		Sleep(10);
+
 	};
 	return 0;
+//------------------------------------------------------------------------//
 }
+//------------------------------------------------------------------------//
+
+// SetCursorPos(xpos,ypos); kursori paigutamine kuhugi, pole veel kasutusel
+
